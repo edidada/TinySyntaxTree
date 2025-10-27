@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "analyse.h"
 #include <QDebug>
-#include <scan.h>
+#include "scan.h"
 #include <QString>
 #pragma execution_character_set("utf-8")
 
@@ -32,8 +32,8 @@ QTreeWidgetItem* AnalyzeCode()
     syntaxTree = parse();
     if (!Error)
     {
-        qDebug() << "Éú³É³É¹¦£¡";
-        debugMsg.append("\n").append(QString("Éú³É³É¹¦£¡"));
+        qDebug() << "ï¿½ï¿½ï¿½É³É¹ï¿½ï¿½ï¿½";
+        debugMsg.append("\n").append(QString("ï¿½ï¿½ï¿½É³É¹ï¿½ï¿½ï¿½"));
         return printTree(syntaxTree,NULL);
     }
     return NULL;

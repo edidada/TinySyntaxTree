@@ -34,8 +34,8 @@ static TreeNode* reg_factor(void);
 
 static void syntaxError(std::string message)
 {
-    qDebug() << "µÚ" << lineno << "ÐÐ£¬´æÔÚ´íÎó£º" << QString::fromStdString(message);
-    std::string msg =  (string)"ÐÐ£¬´æÔÚ´íÎó£º" + message;
+    qDebug() << "ç¬¬" << lineno << "è¡Œï¼Œå­˜åœ¨é”™è¯¯ï¼š" << QString::fromStdString(message);
+    std::string msg =  (string)"è¡Œï¼Œå­˜åœ¨é”™è¯¯ï¼š" + message;
     debugMsg.append("\n").append(QString::number(lineno)).append(QString::fromStdString(msg));
     /*fprintf(listing, "\n>>> ");
     fprintf(listing, "Syntax error at line %d: %s", lineno, message);*/
@@ -75,7 +75,7 @@ TreeNode* stmt_sequence(void)
 }
 
 
-//P394 
+//P394
 //lineno: 961
 TreeNode* statement(void)
 {
@@ -96,7 +96,7 @@ TreeNode* statement(void)
 }
 
 
-//P394 
+//P394
 //lineno: 977
 TreeNode* if_stmt(void)
 {
@@ -117,7 +117,7 @@ TreeNode* if_stmt(void)
     return t;
 }
 
-//P394 
+//P394
 //lineno:991
 TreeNode* repeat_stmt(void)
 {
@@ -341,7 +341,7 @@ TreeNode* factor(void)
 
 TreeNode* for_stmt(void)
 {
-    // ¸³Öµ½Úµã
+    // èµ‹å€¼èŠ‚ç‚¹
     TreeNode* p = newStmtNode(AssignK);
     match(FOR);
     if ((p != NULL) && (token == ID))
@@ -354,22 +354,22 @@ TreeNode* for_stmt(void)
     {
         p->child[0] = simple_exp();
     }
-    // FOR½Úµã
+    // FORèŠ‚ç‚¹
     TreeNode* t = NULL;
-    if (token == TO) { // ²½³¤+1
+    if (token == TO) { // æ­¥é•¿+1
         t = newStmtNode(ForToK);
         t->child[0] = p;
         match(TO);
     }
-    else if (token == DOWNTO) { // ²½³¤-1
+    else if (token == DOWNTO) { // æ­¥é•¿-1
         t = newStmtNode(ForDowntoK);
         t->child[0] = p;
-        match(DOWNTO); 
+        match(DOWNTO);
     }
-    else    // ³ö´íÌáÊ¾
+    else    // å‡ºé”™æç¤º
     {
         syntaxError("Expecting 'to' or 'downto' after assignment in for statement");
-    } 
+    }
     t->child[1] = simple_exp();
     match(DO);
     t->child[2] = stmt_sequence();
