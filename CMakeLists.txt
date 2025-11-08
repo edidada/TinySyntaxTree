@@ -28,7 +28,9 @@ set(PROJECT_SOURCES
 
 # Create executable
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
-
+add_executable(compiler_lab_3_main_cmd code/compiler_lab_3/main_cmd.cpp
+        code/compiler_lab_3/analyse.cpp
+)
 # Link Qt libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 
