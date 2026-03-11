@@ -106,6 +106,61 @@ jobs:
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest --build-config ${{ matrix.build_type }}
+      shell: bash
+      run: |
+        echo "Running TinySyntaxTree parser tests..."
+        
+        # Determine executable path based on OS
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          EXECUTABLE="${{ steps.strings.outputs.build-output-dir }}/Release/compiler_lab_3_main_cmd.exe"
+        else
+          EXECUTABLE="${{ steps.strings.outputs.build-output-dir }}/compiler_lab_3_main_cmd"
+        fi
+        
+        # Define test files
+        TEST_FILES=(
+          "题目样例1.txt"
+          "题目样例2.txt"
+          "综合测试1.txt"
+          "综合测试2.txt"
+          "综合测试3.txt"
+          "if-stmt.txt"
+          "for.txt"
+          "运算符号.txt"
+          "比较符号.txt"
+          "位运算.txt"
+          "+=.txt"
+          "正则表达式.txt"
+          "嵌套if-else.txt"
+          "多语句.txt"
+          "三层for循环.txt"
+          "复杂表达式.txt"
+          "repeat语句.txt"
+        )
+        
+        PASSED=0
+        FAILED=0
+        
+        for test_file in "${TEST_FILES[@]}"; do
+          if [ -f "${{ github.workspace }}/test/$test_file" ]; then
+            echo "Testing: $test_file"
+            if "$EXECUTABLE" "${{ github.workspace }}/test/$test_file" > /dev/null 2>&1; then
+              echo "  ✓ PASSED"
+              ((PASSED++))
+            else
+              echo "  ✗ FAILED"
+              ((FAILED++))
+            fi
+          fi
+        done
+        
+        echo ""
+        echo "Test Summary:"
+        echo "  Passed: $PASSED"
+        echo "  Failed: $FAILED"
+        echo "  Total:  $((PASSED + FAILED))"
+        
+        if [ $FAILED -gt 0 ]; then
+          echo "Some tests failed!"
+          exit 1
+        fi

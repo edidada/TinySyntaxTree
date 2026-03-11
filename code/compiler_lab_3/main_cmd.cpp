@@ -91,22 +91,23 @@ void processTinyCode(const std::string& sourceCode, const std::string& outputPat
 
     // Call AnalyzeCode (assuming it returns void* instead of QTreeWidgetItem*)
     void* parseTree = AnalyzeCode();
+    std::string debugMsgStr = debugMsg.toStdString();
     if (Error) {
-        std::cerr << "Syntax error in program. Debug message:\n" << debugMsg << '\n';
+        std::cerr << "Syntax error in program. Debug message:\n" << debugMsgStr << '\n';
         fclose(source);
         source = nullptr;
         std::filesystem::remove(tempPath);
         if (!outputPath.empty()) {
-            saveOutputFile(outputPath, debugMsg);
+            saveOutputFile(outputPath, debugMsgStr);
         } else {
-            std::cout << debugMsg << '\n';
+            std::cout << debugMsgStr << '\n';
         }
         return;
     }
 
     // Output parse tree (simplified, as structure is unknown)
     if (parseTree) {
-        std::string result = debugMsg.empty() ? "Parse tree generated (structure not displayed in console mode)" : debugMsg;
+        std::string result = debugMsgStr.empty() ? "Parse tree generated (structure not displayed in console mode)" : debugMsgStr;
         if (!outputPath.empty()) {
             saveOutputFile(outputPath, result);
         } else {

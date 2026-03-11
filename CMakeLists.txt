@@ -11,6 +11,9 @@ set(CMAKE_AUTOUIC ON)  # Auto-process .ui files
 set(CMAKE_CXX_STANDARD 17)  # Use C++17 for modern Qt projects
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 设置 vcpkg Qt5 路径
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};$ENV{VCPKG_ROOT}/installed/x64-windows/share/cmake/Qt5")
+
 find_package(Qt5 COMPONENTS Widgets REQUIRED)  # Fallback to Qt5
 
 # Define source files
@@ -30,9 +33,13 @@ set(PROJECT_SOURCES
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 add_executable(compiler_lab_3_main_cmd code/compiler_lab_3/main_cmd.cpp
         code/compiler_lab_3/analyse.cpp
+        code/compiler_lab_3/parse.cpp
+        code/compiler_lab_3/scan.cpp
+        code/compiler_lab_3/util.cpp
 )
 # Link Qt libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
+target_link_libraries(compiler_lab_3_main_cmd PRIVATE Qt5::Widgets)
 
 # Set include directories (if needed)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})  # For ui_widget.h
@@ -41,6 +48,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}) 
 if (MSVC)
     # Ensure MSVC uses UTF-8 for source files (avoid encoding issues)
     target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
+    target_compile_options(compiler_lab_3_main_cmd PRIVATE /utf-8)
     # Set runtime library to MultiThreaded (consistent with Qt builds)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
